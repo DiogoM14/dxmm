@@ -1,0 +1,11 @@
+services:
+  site:
+    command: npm run dev
+    env:
+      HOST: 0.0.0.0
+      LIVE_RELOAD: "1"
+    health: /
+    portal:
+      title: dxmm
+      description: Live preview of the site.
+    agent: control
