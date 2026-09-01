@@ -1,9 +1,0 @@
-[Unit]
-Description=dxmm.pt git pull from GitHub
-After=network-online.target
-
-[Service]
-Type=oneshot
-WorkingDirectory=/home/dxmm/Work/dxmm
-Environment=GIT_TERMINAL_PROMPT=0
-ExecStart=/home/dxmm/Work/dxmm/scripts/sync.sh
