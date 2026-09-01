@@ -1,0 +1,14 @@
+[Unit]
+Description=Cloudflare Tunnel for dxmm.pt
+After=network-online.target dxmm.service
+Wants=network-online.target
+Requires=dxmm.service
+
+[Service]
+Type=simple
+ExecStart=/home/dxmm/.local/bin/cloudflared tunnel --no-autoupdate --config /home/dxmm/.cloudflared/config.yml run
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

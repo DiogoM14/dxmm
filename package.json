@@ -1,0 +1,16 @@
+{
+  "name": "dxmm",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs && node serve.mjs",
+    "start": "node serve.mjs",
+    "new": "scripts/new.sh",
+    "push": "scripts/publish.sh"
+  },
+  "dependencies": {
+    "marked": "^15.0.0"
+  }
+}
