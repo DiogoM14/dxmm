@@ -14,4 +14,4 @@ Hopefully, as the time goes by, the quality of each note and writing will improv
 
 I will write about things I like, so the topics may change over the time.
 
-For this, I'm committing to use AI purely for grammatical errors, my main goal is to learn organizing my thoughts.
+For this, I'm committing to use AI purely for spelling errors, my main goal is to learn organizing my thoughts.
