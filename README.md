@@ -40,10 +40,10 @@ scripts/setup-tunnel.sh     # after Cloudflare login + domain on Cloudflare
 
 The domain is registered at site.eu. A Cloudflare Tunnel needs the zone on Cloudflare:
 
-1. Add `dxmm.pt` at [dash.cloudflare.com](https://dash.cloudflare.com) (free plan is enough).
-2. Copy the two nameservers Cloudflare shows (e.g. `ada.ns.cloudflare.com`).
-3. At site.eu, replace the domain's nameservers with those two. Don't touch anything else there.
-4. Wait until `dig NS dxmm.pt` returns the Cloudflare nameservers.
-5. `scripts/setup-tunnel.sh` — browser login, creates the tunnel, CNAME records, starts the service.
+1. Add `dxmm.pt` at [dash.cloudflare.com](https://dash.cloudflare.com) (free plan is enough). Copy the two nameservers it shows (`something.ns.cloudflare.com`).
+2. If DNSSEC is on at site.eu, turn it off first — changing nameservers with DNSSEC still active can make the domain vanish.
+3. At [site.eu](https://site.eu): domain → Advanced settings → switch **off** “Use default Site.eu settings” → disable DNS management → paste the two Cloudflare nameservers → save. (You cannot keep Site.eu DNS and custom nameservers at the same time.)
+4. Wait until `dig NS dxmm.pt` returns the Cloudflare nameservers (minutes, sometimes hours).
+5. `scripts/setup-tunnel.sh` — browser login, creates the tunnel, CNAME records, starts the user service.
 
-Until then the site is only on localhost (and GitHub as source).
+Until then the site is on `http://127.0.0.1:8765` and the markdown is on GitHub.
