@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Pull remote commits if the working tree is clean. The file watcher rebuilds.
 set -euo pipefail
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:/usr/bin:$PATH"
 cd "$(dirname "$0")/.."
 
 if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
