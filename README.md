@@ -21,6 +21,16 @@ npm run build          # writes dist/index.html
 npm run dev            # serve + live reload + watch
 ```
 
+## GitHub Pages
+
+The `main` branch deploys automatically through `.github/workflows/pages.yml`.
+In the repository on GitHub, open **Settings → Pages** and set **Source** to
+**GitHub Actions**. GitHub will then provide a temporary URL like
+`https://diogom14.github.io/dxmm/` after the first successful deployment.
+
+When `dxmm.pt` is ready, configure it as the custom domain in the same Pages
+settings; the DNS records and a `CNAME` file can be added at that point.
+
 ## Hosted on this PC
 
 User systemd units (linger enabled so they survive logout):
