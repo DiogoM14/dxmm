@@ -123,6 +123,49 @@ article .tags { margin: -2rem 0 2.5rem; }
 article p { margin: 0 0 1.2rem; }
 article h2 { font-style: normal; color: var(--fg); font-size: 1.15rem; margin: 2.2rem 0 .6rem; }
 article ul { margin: 0 0 1.2rem; }
+article blockquote {
+  margin: 2rem 0;
+  padding: .2rem 0 .2rem 1.25rem;
+  border-left: 2px solid var(--accent);
+  color: var(--muted);
+  font-style: italic;
+}
+article blockquote p { margin-bottom: 1rem; }
+article blockquote p:last-child { margin-bottom: 0; }
+article ol { margin: 0 0 1.2rem; padding-left: 1.5rem; }
+article li:has(> input[type="checkbox"]) { list-style: none; margin-left: -1.2rem; }
+article input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-grid;
+  width: .9rem;
+  height: .9rem;
+  margin: 0 .55rem 0 0;
+  padding: 0;
+  border: 1px solid var(--muted);
+  border-radius: 2px;
+  background: transparent;
+  vertical-align: -.1em;
+  place-content: center;
+}
+article input[type="checkbox"]::before {
+  content: "";
+  width: .42rem;
+  height: .23rem;
+  border: solid var(--bg);
+  border-width: 0 0 2px 2px;
+  transform: rotate(-45deg) scale(0);
+  transition: transform .12s ease;
+}
+article input[type="checkbox"]:checked { border-color: var(--accent); background: var(--accent); }
+article input[type="checkbox"]:checked::before { transform: rotate(-45deg) scale(1); }
+article input[type="checkbox"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+article table { display: block; width: 100%; overflow-x: auto; border-collapse: collapse; margin: 0 0 1.5rem; font-size: .92em; }
+article th, article td { padding: .55rem .75rem; border-bottom: 1px solid var(--rule); text-align: left; white-space: nowrap; }
+article th { color: var(--fg); font-weight: normal; }
+article thead th { border-bottom-color: var(--accent); }
+article img { display: block; max-width: 100%; height: auto; margin: 2rem auto; }
+article hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
 pre { background: var(--rule); padding: .9rem 1rem; border-radius: 4px; overflow-x: auto; font-family: var(--mono); font-size: .82rem; line-height: 1.5; margin: 0 0 1.4rem; }
 code { font-family: var(--mono); font-size: .85em; }
 pre code { font-size: inherit; background: none; padding: 0; }
