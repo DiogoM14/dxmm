@@ -49,7 +49,7 @@ function loadSection(section) {
       date: meta.date,
       tags: meta.tags || [],
       title: meta.title,
-      html: marked.parse(body.trim()).trim(),
+      html: marked.parse(body.trim()).trim().replace(/<\/blockquote>\s*<blockquote>/g, "\n"),
     });
   }
   // newest first — the template's pager assumes index-1 = newer, index+1 = older
