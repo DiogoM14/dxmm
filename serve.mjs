@@ -76,6 +76,18 @@ const server = createServer((req, res) => {
     return;
   }
 
+  if (/^\/assets\/watch-list\/[a-z0-9-]+\.png$/.test(url)) {
+    const file = join(dist, url.slice(1));
+    if (!existsSync(file)) {
+      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+      res.end("not found");
+      return;
+    }
+    res.writeHead(200, { "Content-Type": "image/png", "Cache-Control": "no-cache" });
+    res.end(readFileSync(file));
+    return;
+  }
+
   if (url !== "/" && url !== "/index.html") {
     res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
     res.end("not found");

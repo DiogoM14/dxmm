@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Builds dist/index.html from src/template.html + content/**/*.md
-import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync, cpSync, rmSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { marked } from "marked";
@@ -78,5 +78,8 @@ const js = SECTIONS
 
 mkdirSync(join(root, "dist"), { recursive: true });
 writeFileSync(join(root, "dist", "index.html"), template.replace("/*__CONTENT__*/", js));
+rmSync(join(root, "dist", "assets"), { recursive: true, force: true });
+const assets = join(root, "content", "assets");
+if (existsSync(assets)) cpSync(assets, join(root, "dist", "assets"), { recursive: true });
 
 console.log(`built dist/index.html — ${SECTIONS.map(s => `${data[s].length} ${s}`).join(", ")} (${total} total)`);

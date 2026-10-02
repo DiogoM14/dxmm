@@ -166,6 +166,18 @@ article th { color: var(--fg); font-weight: normal; }
 article thead th { border-bottom-color: var(--accent); }
 article img { display: block; max-width: 100%; height: auto; margin: 2rem auto; }
 article hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+.watch-list h2 { margin: 2.9rem 0 .8rem; color: var(--muted); font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .075em; }
+.watch-list ul { list-style: none; padding: 0; }
+.watch-list li { display: grid; grid-template: "meta image" auto "name image" auto / minmax(0, 1fr) 6rem; column-gap: 1.5rem; align-items: center; min-height: 7.5rem; padding: .65rem .35rem .65rem 0; margin: 0; }
+.watch-list li:not(:last-child) { border-bottom: 1px solid color-mix(in srgb, var(--rule) 65%, transparent); }
+.watch-list li > img { grid-area: image; justify-self: end; width: 5.25rem; height: 6.35rem; margin: 0; object-fit: contain; cursor: zoom-in; }
+.watch-list li > strong { grid-area: name; align-self: start; font-size: 1.12rem; font-weight: normal; line-height: 1.3; }
+.watch-meta { grid-area: meta; align-self: end; color: color-mix(in srgb, var(--muted) 82%, var(--fg)); font-family: var(--mono); font-size: .67rem; line-height: 1.5; margin-bottom: .3rem; text-transform: uppercase; letter-spacing: .065em; }
+@media (max-width: 30rem) {
+  .watch-list li { grid-template: "meta image" auto "name image" auto / minmax(0, 1fr) 4.5rem; column-gap: .75rem; min-height: 6.75rem; padding: .6rem .15rem .6rem .5rem; }
+  .watch-list li > img { width: 4rem; height: 5.35rem; }
+  .watch-list li > strong { font-size: .98rem; }
+}
 pre { background: var(--rule); padding: .9rem 1rem; border-radius: 4px; overflow-x: auto; font-family: var(--mono); font-size: .82rem; line-height: 1.5; margin: 0 0 1.4rem; }
 code { font-family: var(--mono); font-size: .85em; }
 pre code { font-size: inherit; background: none; padding: 0; }
@@ -184,6 +196,13 @@ footer .clock { margin-left: auto; font-family: var(--mono); font-size: .8rem; }
 footer .clock b { font-weight: normal; color: var(--fg); }
 footer a { text-decoration: none; }
 footer a:hover { text-decoration: underline; }
+.watch-preview { width: min(42rem, calc(100vw - 2rem)); height: min(44rem, calc(100svh - 2rem)); padding: 2.75rem 1.25rem 1rem; border: 1px solid var(--rule); border-radius: .5rem; background: var(--bg); color: var(--fg); }
+.watch-preview[open] { display: grid; grid-template-rows: minmax(0, 1fr) auto; place-items: center; }
+.watch-preview::backdrop { background: rgb(0 0 0 / 78%); backdrop-filter: blur(4px); }
+.watch-preview img { display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+.watch-preview p { margin: .75rem 0 0; color: var(--muted); font-family: var(--mono); font-size: .72rem; text-align: center; }
+.watch-preview button { position: absolute; top: .75rem; right: .75rem; width: 2rem; height: 2rem; padding: 0; border: 0; border-radius: 50%; background: var(--rule); color: var(--fg); font: 1.2rem/1 var(--font); cursor: pointer; }
+.watch-preview button:hover { color: var(--accent); }
 @media (prefers-reduced-motion: reduce) { body, main, header, header::before, header *, .brand span { transition: none; } }
 </style>
 </head>
@@ -210,6 +229,11 @@ footer a:hover { text-decoration: underline; }
   <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">cc by-sa 4.0</a>
   <span class="clock">Portugal <b id="clock"></b></span>
 </footer>
+<dialog class="watch-preview" id="watch-preview" aria-labelledby="watch-preview-title">
+  <button type="button" aria-label="Close expanded image">×</button>
+  <img alt="">
+  <p id="watch-preview-title"></p>
+</dialog>
 
 <script>
 /*__CONTENT__*/
@@ -267,7 +291,7 @@ const views = {
     const link = (x, cls, label) => x
       ? `<a class="${cls}" href="#/${section}/${x.slug}"><small>${label}</small><span>${x.title}</span></a>` : "";
     return `
-      <article>
+      <article class="${p.slug === "watch-list" ? "watch-list" : ""}">
         <a class="back" href="#/${section}">← ${section}</a>
         <h1>${p.title}</h1>
         <time>${p.date}</time>
@@ -287,7 +311,16 @@ function render(animate = true) {
   else if (views[section]) html = views[section](tag);
   else html = views.home();
   const main = document.getElementById("main");
-  const swap = () => { main.innerHTML = html; window.scrollTo(0, 0); main.classList.remove("leaving"); };
+  const swap = () => {
+    main.innerHTML = html;
+    main.querySelectorAll(".watch-list li > img").forEach(image => {
+      image.tabIndex = 0;
+      image.setAttribute("role", "button");
+      image.setAttribute("aria-label", `Expand ${image.alt}`);
+    });
+    window.scrollTo(0, 0);
+    main.classList.remove("leaving");
+  };
   if (animate) { main.classList.add("leaving"); setTimeout(swap, 180); } else swap();
   document.querySelectorAll("nav a").forEach(a => {
     if (a.dataset.route === section) a.setAttribute("aria-current", "page");
@@ -307,6 +340,39 @@ function initTheme() {
 }
 document.getElementById("theme").addEventListener("click", () => {
   setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+});
+
+const watchPreview = document.getElementById("watch-preview");
+const watchPreviewImage = watchPreview.querySelector("img");
+const watchPreviewTitle = document.getElementById("watch-preview-title");
+let watchPreviewTrigger;
+
+function openWatchPreview(image) {
+  watchPreviewTrigger = image;
+  watchPreviewImage.src = image.currentSrc || image.src;
+  watchPreviewImage.alt = image.alt;
+  watchPreviewTitle.textContent = image.alt;
+  watchPreview.showModal();
+}
+
+document.getElementById("main").addEventListener("click", event => {
+  const image = event.target.closest(".watch-list li > img");
+  if (image) openWatchPreview(image);
+});
+document.getElementById("main").addEventListener("keydown", event => {
+  const image = event.target.closest(".watch-list li > img");
+  if (image && (event.key === "Enter" || event.key === " ")) {
+    event.preventDefault();
+    openWatchPreview(image);
+  }
+});
+watchPreview.querySelector("button").addEventListener("click", () => watchPreview.close());
+watchPreview.addEventListener("click", event => {
+  if (event.target === watchPreview) watchPreview.close();
+});
+watchPreview.addEventListener("close", () => {
+  watchPreviewImage.removeAttribute("src");
+  watchPreviewTrigger?.focus();
 });
 
 const header = document.querySelector("header");
