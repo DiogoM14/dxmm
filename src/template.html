@@ -190,6 +190,16 @@ p code { background: var(--rule); padding: .1em .35em; border-radius: 3px; }
 .pager a:hover span { text-decoration: underline; }
 article h1 { margin-bottom: .25rem; }
 article > time { color: var(--muted); font-family: var(--mono); font-size: .8rem; display: block; margin-bottom: 2.5rem; }
+.from-local-networks-to-the-internet { line-height: 1.7; }
+.from-local-networks-to-the-internet p { margin-bottom: 1.2em; }
+.from-local-networks-to-the-internet h1 { line-height: 1.25; margin-bottom: 1.25rem; }
+.from-local-networks-to-the-internet h2 { line-height: 1.4; margin: 2.5rem 0 .85rem; }
+.from-local-networks-to-the-internet h3 { line-height: 1.45; margin: 2rem 0 .75rem; }
+.from-local-networks-to-the-internet ul,
+.from-local-networks-to-the-internet ol { margin-bottom: 1.25rem; }
+.from-local-networks-to-the-internet li { margin: .35rem 0; }
+.from-local-networks-to-the-internet table { line-height: 1.6; margin: 1.25rem 0 1.75rem; }
+.from-local-networks-to-the-internet hr { margin: 3.25rem 0 2rem; }
 .back { display: inline-block; margin-bottom: 2rem; color: var(--muted); text-decoration: none; }
 .back:hover { color: var(--fg); }
 footer { max-width: 44rem; width: 100%; margin: 0 auto; padding: 1.5rem 1.5rem 2rem; color: var(--muted); font-size: .85rem; display: flex; gap: 1.25rem; align-items: baseline; }
@@ -292,7 +302,7 @@ const views = {
     const link = (x, cls, label) => x
       ? `<a class="${cls}" href="#/${section}/${x.slug}"><small>${label}</small><span>${x.title}</span></a>` : "";
     return `
-      <article class="${p.slug === "watch-list" ? "watch-list" : ""}">
+      <article class="${p.slug}">
         <a class="back" href="#/${section}">← ${section}</a>
         <h1>${p.title}</h1>
         <time>${p.date}</time>
